@@ -176,95 +176,38 @@
       transform: scale(1.1);
       box-shadow: 0 0 20px rgba(73, 237, 0, 0.8);
     }
+
+    .progress-bar {
+      height: 6px;
+      width: 100%;
+      background-color: #333;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background-color: #49ed00;
+      width: 0%;
+      transition: width 1s linear;
+    }
   </style>
   <script>
     let shortLinks = [
-      'https://youtube.com/shorts/xDDvbXyaAjE?feature=share'
+      'https://youtube.com/shorts/xDDvbXyaAjE?feature=share',
+      'https://youtube.com/shorts/ZgRVGBjz_4Q',
+      'https://youtube.com/shorts/Apav10GuHuY'
     ];
 
     let links = shortLinks.map(url => {
-      const id = url.split('/').pop();
+      const id = url.split('/').pop().split('?')[0];
       return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1`;
     });
 
     let currentIndex = 0;
     let autoNavigateInterval;
+    let progressInterval;
+    const autoDuration = 35000; // 35 seconds
 
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
-    function refreshPage(interval = 250000) {
-      setInterval(() => {
-        location.reload();
-      }, interval);
-    }
-
-    function showLink(index) {
-      const iframe = document.getElementById('modalIframe');
-      const modal = document.getElementById('myModal');
-      const spinner = document.getElementById('spinner');
-      iframe.src = links[index];
-      modal.style.display = 'flex';
-      spinner.style.display = 'block';
-      iframe.onload = () => {
-        spinner.style.display = 'none';
-      };
-      clearInterval(autoNavigateInterval);
-      autoNavigateInterval = setInterval(() => {
-        navigate(1);
-      }, Math.floor(Math.random() * (40000 - 30000 + 1) + 30000));
-    }
-
-    function navigate(direction) {
-      currentIndex = (currentIndex + direction + links.length) % links.length;
-      showLink(currentIndex);
-    }
-
-    function goToSite() {
-      window.open(shortLinks[currentIndex], '_blank');
-    }
-
-    function closeModal() {
-      document.getElementById('myModal').style.display = 'none';
-      document.getElementById('modalIframe').src = '';
-      document.getElementById('fallback').style.display = 'flex';
-      clearInterval(autoNavigateInterval);
-    }
-
-    function reopenModal() {
-      showLink(currentIndex);
-    }
-
-    window.onload = function () {
-      shuffleArray(shortLinks);
-      refreshPage();
-      showLink(currentIndex);
-    };
-  </script>
-</head>
-<body>
-  <div class="modal" id="myModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span>Shorts Portal</span>
-        <span class="close" onclick="closeModal()">×</span>
-      </div>
-      <div class="spinner" id="spinner"></div>
-      <iframe id="modalIframe" src=""></iframe>
-      <div class="nav-buttons">
-        <button class="arrow-btn" onclick="navigate(-1)"><i class="fas fa-arrow-left"></i></button>
-        <button class="go-btn" onclick="goToSite()">Watch on YouTube <i class="fas fa-play"></i></button>
-        <button class="arrow-btn" onclick="navigate(1)"><i class="fas fa-arrow-right"></i></button>
-      </div>
-    </div>
-  </div>
-  <div class="fallback" id="fallback">
-    <p>The journey awaits. Click below to watch Shorts!</p>
-    <button class="show-modal-btn" onclick="reopenModal()"><i class="fas fa-eye"></i> Enter Portal</button>
-  </div>
-</body>
-</html>
+        const j = Math.floor
